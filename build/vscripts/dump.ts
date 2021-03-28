@@ -1,8 +1,12 @@
 import { readDump } from '../util';
 
-const reloadMessage = 'Initializing script VM...\n...done';
-export const serverDump: Dump = JSON.parse(readDump('script_reload').replace(reloadMessage, ''));
-export const clientDump: Dump = JSON.parse(readDump('cl_script_reload').replace(reloadMessage, ''));
+const cleanOutput = (input: string) => {
+  return input
+    .replace('Initializing script VM...\n...done', '')
+    .replace(/LUA Memory usage warning: [^\n]*/g, '');
+};
+export const serverDump: Dump = JSON.parse(cleanOutput(readDump('script_reload')));
+export const clientDump: Dump = JSON.parse(cleanOutput(readDump('cl_script_reload')));
 
 export type Dump = (DumpConstant | DumpClass | DumpFunction)[];
 
